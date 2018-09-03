@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import MovieList from "./components/movieList";
 import { getMovies } from "./services/fakeMovieService";
-import Pagination from "./components/pageComponent.jsx";
 import "./App.css";
 
 class App extends Component {
@@ -40,24 +39,16 @@ class App extends Component {
     this.setState({ selectedPage: page });
   };
 
-  getMovies = () => {
-    const start = (this.state.selectedPage - 1) * this.state.pageSize;
-    return this.state.movies.slice(start, start + 4);
-  };
-
   render() {
     return (
       <main className="container">
         <MovieList
+          selectedPage={this.state.selectedPage}
           onDelete={this.handleDelete}
           onLike={this.handleLike}
-          movies={this.getMovies()}
-        />
-        <Pagination
-          moviesCount={this.state.movies.length}
+          movies={this.state.movies}
           pageSize={this.state.pageSize}
           onPageChange={this.handlePageChange}
-          selectedPage={this.state.selectedPage}
         />
       </main>
     );

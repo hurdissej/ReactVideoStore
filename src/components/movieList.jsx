@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import Like from "./like";
 
+import Pagination from "./pageComponent.jsx";
+
 class MovieList extends Component {
+  getMovies = () => {
+    const start = (this.props.selectedPage - 1) * this.props.pageSize;
+    return this.props.movies.slice(start, start + 4);
+  };
+
   renderTable() {
-    if (this.props.movies.length > 0) {
+    const movies = this.getMovies();
+    if (movies.length > 0) {
       return (
         <div>
-          <p> Displaying {this.props.movies.length} movies in the datbase </p>
+          <p> Displaying {movies.length} movies in the datbase </p>
           <table className="table">
             <thead>
               <tr>
@@ -19,7 +27,7 @@ class MovieList extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.props.movies.map(movie => (
+              {movies.map(movie => (
                 <tr key={movie._id}>
                   <td>{movie.title}</td>
                   <td>{movie.genre.name}</td>
@@ -50,6 +58,12 @@ class MovieList extends Component {
       <React.Fragment>
         {this.props.movies.length === 0 && <p> No movies in the database </p>}
         {this.renderTable()}
+        <Pagination
+          moviesCount={this.props.movies.length}
+          pageSize={this.props.pageSize}
+          onPageChange={x => this.props.onPageChange(x)}
+          selectedPage={this.props.selectedPage}
+        />
       </React.Fragment>
     );
   }

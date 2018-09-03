@@ -21,11 +21,9 @@ class App extends Component {
 
   handleDelete = id => {
     const movies = this.state.movies.filter(x => x._id !== id);
-    console.log(movies);
     this.setState({
       movies: movies
     });
-    console.log(this.state.movies);
   };
 
   handleLike = movie => {

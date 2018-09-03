@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Like from "./like";
 import { paginate } from "../utils/paginate";
-
 import Pagination from "./pageComponent.jsx";
 
 class MovieList extends Component {
@@ -9,7 +8,6 @@ class MovieList extends Component {
     if (movies.length > 0) {
       return (
         <div>
-          <p> Displaying {movies.length} movies in the datbase </p>
           <table className="table">
             <thead>
               <tr>
@@ -57,7 +55,10 @@ class MovieList extends Component {
     );
     return (
       <React.Fragment>
-        {pagedMovies.length === 0 && <p> No movies in the database </p>}
+        {movies.length !== 0 && (
+          <p> Displaying {movies.length} movies in the datbase </p>
+        )}
+        {movies.length === 0 && <p> No movies in the database </p>}
         {this.renderTable(pagedMovies)}
         <Pagination
           itemCount={movies.length}

@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import Like from "./like";
+import { paginate } from "../utils/paginate";
 
 import Pagination from "./pageComponent.jsx";
 
 class MovieList extends Component {
-  getMovies = () => {
-    const start = (this.props.selectedPage - 1) * this.props.pageSize;
-    return this.props.movies.slice(start, start + 4);
-  };
-
   renderTable() {
-    const movies = this.getMovies();
+    const movies = paginate(
+      this.props.selectedPage,
+      this.props.pageSize,
+      this.props.movies
+    );
     if (movies.length > 0) {
       return (
         <div>
@@ -59,7 +59,7 @@ class MovieList extends Component {
         {this.props.movies.length === 0 && <p> No movies in the database </p>}
         {this.renderTable()}
         <Pagination
-          moviesCount={this.props.movies.length}
+          itemCount={this.props.movies.length}
           pageSize={this.props.pageSize}
           onPageChange={x => this.props.onPageChange(x)}
           selectedPage={this.props.selectedPage}

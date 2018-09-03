@@ -2,8 +2,8 @@ import React from "react";
 import _ from "lodash";
 
 const Pagination = props => {
-  const { moviesCount, pageSize, selectedPage, onPageChange } = props;
-  const pagesCount = moviesCount / pageSize;
+  const { itemCount, pageSize, selectedPage, onPageChange } = props;
+  const pagesCount = itemCount / pageSize;
   const pages = _.range(1, pagesCount + 1);
   return (
     <div>

@@ -5,6 +5,8 @@ import NavBar from "./components/navbar.jsx";
 import NotFound from "./components/not-found.jsx";
 import Customers from "./components/customers.jsx";
 import Rentals from "./components/rentals.jsx";
+import MovieForm from "./components/movieForm.jsx";
+import LoginForm from "./components/loginForm.jsx";
 import "./App.css";
 
 class App extends Component {
@@ -14,11 +16,13 @@ class App extends Component {
         <NavBar />
         <div className="content m-4">
           <Switch>
-            <Route path="/movies" component={Movies}/>
-            <Route path="/customers" component={Customers}/>
-            <Route path="/rentals" component={Rentals}/>
-            <Route path="/not-found" component={NotFound}/>
-            <Redirect from="/" to="/movies" />
+            <Route path="/login" exact component={LoginForm} />
+            <Route path="/movies" exact component={Movies} />
+            <Route path="/movies/:id" component={MovieForm} />
+            <Route path="/customers" component={Customers} />
+            <Route path="/rentals" component={Rentals} />
+            <Route path="/not-found" component={NotFound} />
+            <Redirect from="/" exact to="/movies" />
             <Redirect to="/not-found" />
           </Switch>
         </div>

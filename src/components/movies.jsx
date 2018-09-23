@@ -19,26 +19,25 @@ class Movies extends Component {
     sortColumn: { path: "title", order: "asc" }
   };
 
-  async componentDidMount() {
-    let movies = await getMovies();
-    movies = movies.data.map(x => {
-      x.like = false;
-      return x;
-    });
-    this.setState({ movies: movies });
+  getMovies = async () => {
+    const { data } = await getMovies();
+    this.setState({ movies: data });
+  };
+  getGenres = async () => {
     const genres = await getGenres();
     const all = { name: "All Genres" };
-    this.setState({ activeFilter: all });
     genres.unshift(all);
     this.setState({ genres: genres });
+  };
+  async componentDidMount() {
+    this.getGenres();
+    this.getMovies();
   }
 
   handleDelete = async id => {
     await deleteMovie(id);
     const movies = this.state.movies.filter(x => x._id !== id);
-    this.setState({
-      movies: movies
-    });
+    this.setState({ movies: movies });
   };
 
   handleLike = movie => {

@@ -7,6 +7,7 @@ import Customers from "./components/customers.jsx";
 import Rentals from "./components/rentals.jsx";
 import MovieForm from "./components/movieForm.jsx";
 import LoginForm from "./components/loginForm.jsx";
+import RegistrationForm from "./components/registrationForm.jsx";
 import "./App.css";
 
 class App extends Component {
@@ -17,6 +18,7 @@ class App extends Component {
         <div className="content m-4">
           <Switch>
             <Route path="/login" exact component={LoginForm} />
+            <Route path="/register" exact component={RegistrationForm} />
             <Route path="/movies" exact component={Movies} />
             <Route path="/movies/:id" component={MovieForm} />
             <Route path="/customers" component={Customers} />

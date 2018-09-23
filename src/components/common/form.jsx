@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Input from "./input.jsx";
+import Dropdown from "./dropdown.jsx";
 import Joi from "joi-browser";
 
 class Form extends Component {
@@ -57,6 +58,21 @@ class Form extends Component {
       />
     );
   }
+
+  renderDropdown(id, label, options) {
+    const { data, errors } = this.state;
+    return (
+      <Dropdown
+        id={id}
+        value={data[id]}
+        label={label}
+        onChange={this.handleChange}
+        options={options}
+        error={errors[id]}
+      />
+    );
+  }
+
   renderButton(label) {
     return (
       <button disabled={this.validate()} className="btn btn-primary">

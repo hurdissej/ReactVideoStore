@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { paginate } from "../utils/paginate";
-import Filter from "./filter.jsx";
-import Pagination from "./pagination.jsx";
+import { Link } from "react-router-dom";
+import Filter from "./common/filter.jsx";
+import Input from "./common/input.jsx";
+import Pagination from "./common/pagination.jsx";
 import MovieTable from "./movieTable";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
@@ -9,6 +11,7 @@ import _ from "lodash";
 
 class Movies extends Component {
   state = {
+    searchValue: "",
     movies: [],
     genres: [],
     pageSize: 4,
@@ -56,15 +59,33 @@ class Movies extends Component {
     this.setState({ sortColumn: sortColumn });
   };
 
-  getPagedData = (activeFilter, movies, sortColumn, selectedPage, pageSize) => {
+  handleSearch = ({ currentTarget: input }) => {
+    this.setState({ activeFilter: null });
+    this.setState({ selectedPage: 1 });
+    this.setState({ searchValue: input.value });
+  };
+
+  getPagedData = (
+    activeFilter,
+    movies,
+    sortColumn,
+    selectedPage,
+    pageSize,
+    searchValue
+  ) => {
     const filtered =
       activeFilter && activeFilter._id
         ? movies.filter(movie => movie.genre._id === activeFilter._id)
         : movies;
 
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const searched = filtered.filter(movie => {
+      const regex = new RegExp(searchValue, "gi");
+      if (movie.title.match(regex)) return true;
+    });
+
+    const sorted = _.orderBy(searched, [sortColumn.path], [sortColumn.order]);
     const pagedMovies = paginate(selectedPage, pageSize, sorted);
-    return { totalCount: filtered.length, data: pagedMovies };
+    return { totalCount: searched.length, data: pagedMovies };
   };
 
   render() {
@@ -73,7 +94,8 @@ class Movies extends Component {
       selectedPage,
       pageSize,
       movies,
-      activeFilter
+      activeFilter,
+      searchValue
     } = this.state;
 
     const pagedData = this.getPagedData(
@@ -81,7 +103,8 @@ class Movies extends Component {
       movies,
       sortColumn,
       selectedPage,
-      pageSize
+      pageSize,
+      searchValue // To do - extract search into its own component
     );
 
     return (
@@ -96,6 +119,17 @@ class Movies extends Component {
           />
         </div>
         <div className="col-sm-6">
+          <Link to="/movies/new" className="btn btn-primary m-2">
+            New Movie!
+          </Link>
+          <Input
+            type="test"
+            id="search"
+            label="Search"
+            className="my-3"
+            onChange={this.handleSearch}
+            value={this.state.searchValue}
+          />
           {pagedData.totalCount !== 0 && (
             <p> Displaying {pagedData.totalCount} movies in the datbase </p>
           )}

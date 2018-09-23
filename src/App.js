@@ -9,11 +9,14 @@ import MovieForm from "./components/movieForm.jsx";
 import LoginForm from "./components/loginForm.jsx";
 import RegistrationForm from "./components/registrationForm.jsx";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
   render() {
     return (
       <div>
+        <ToastContainer />
         <NavBar />
         <div className="content m-4">
           <Switch>

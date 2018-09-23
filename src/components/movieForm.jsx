@@ -1,7 +1,7 @@
 import React from "react";
 import Form from "./common/form";
-import { getGenres } from "../services/fakeGenreService";
-import { saveMovie, getMovie } from "../services/fakeMovieService";
+import { getGenres } from "../services/genreService";
+import { saveMovie, getMovie } from "../services/movieService";
 import Joi from "joi-browser";
 
 class MovieForm extends Form {
@@ -16,15 +16,22 @@ class MovieForm extends Form {
     genres: []
   };
 
-  componentDidMount() {
-    const genres = getGenres();
+  setGenres = async () => {
+    const genres = await getGenres();
     this.setState({ genres: genres });
+  };
 
+  setMovie = async () => {
     const id = this.props.match.params.id;
     if (id === "new") return;
-    const movie = getMovie(id);
+    const movie = await getMovie(id);
     const viewModel = this.mapToViewModel(movie);
     this.setState({ data: viewModel });
+  };
+
+  componentDidMount() {
+    this.setGenres();
+    this.setMovie();
   }
 
   mapToViewModel = input => {
@@ -58,8 +65,8 @@ class MovieForm extends Form {
       .label("Rate")
   };
 
-  handleSave = () => {
-    saveMovie(this.state.data);
+  doSubmit = async () => {
+    await saveMovie(this.state.data);
     this.props.history.push("/movies");
   };
 
@@ -71,7 +78,7 @@ class MovieForm extends Form {
           <h1> Movie Form: {this.props.match.params.id} </h1>
         )}
 
-        <form onSubmit={this.handleSave}>
+        <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
           {this.renderDropdown("genreId", "Genre", this.state.genres)}
           {this.renderInput("numberInStock", "NumberInStock", "numberInStock")}

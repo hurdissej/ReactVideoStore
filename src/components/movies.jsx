@@ -5,8 +5,8 @@ import Filter from "./common/filter.jsx";
 import Input from "./common/input.jsx";
 import Pagination from "./common/pagination.jsx";
 import MovieTable from "./movieTable";
-import { getMovies } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovies, deleteMovie } from "../services/movieService";
+import { getGenres } from "../services/genreService";
 import _ from "lodash";
 
 class Movies extends Component {
@@ -19,20 +19,22 @@ class Movies extends Component {
     sortColumn: { path: "title", order: "asc" }
   };
 
-  componentDidMount() {
-    const movies = getMovies().map(x => {
+  async componentDidMount() {
+    let movies = await getMovies();
+    movies = movies.data.map(x => {
       x.like = false;
       return x;
     });
     this.setState({ movies: movies });
-    const genres = getGenres();
+    const genres = await getGenres();
     const all = { name: "All Genres" };
     this.setState({ activeFilter: all });
     genres.unshift(all);
     this.setState({ genres: genres });
   }
 
-  handleDelete = id => {
+  handleDelete = async id => {
+    await deleteMovie(id);
     const movies = this.state.movies.filter(x => x._id !== id);
     this.setState({
       movies: movies
@@ -81,6 +83,7 @@ class Movies extends Component {
     const searched = filtered.filter(movie => {
       const regex = new RegExp(searchValue, "gi");
       if (movie.title.match(regex)) return true;
+      return false;
     });
 
     const sorted = _.orderBy(searched, [sortColumn.path], [sortColumn.order]);
